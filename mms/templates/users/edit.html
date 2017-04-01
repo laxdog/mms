@@ -1,0 +1,37 @@
+<!-- extend layout -->
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container-narrow">
+        <h1>Register</h1>
+        <br/>
+        <form id="registerForm" class="form form-register" method="POST" action="" role="form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="form-group">
+                {{ form.username.label }}
+                {{ form.username(placeholder=current_user.username, class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(placeholder=current_user.email, class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.first_name.label }}
+                {{ form.first_name(placeholder=current_user.first_name, class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.last_name.label }}
+                {{ form.last_name(placeholder=current_user.last_name, class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.about.label }}
+                {{ form.about(placeholder=current_user.about, class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.url.label }}
+                {{ form.url(placeholder=current_user.url, class_="form-control") }}
+            </div>
+            <p><input class="btn btn-default btn-submit" type="submit" value="Update"></p>
+            </div>
+        </form>
+    </div>
+{% endblock %}

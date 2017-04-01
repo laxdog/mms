@@ -1,0 +1,28 @@
+<div class="media member_row
+    {% if user.active %}
+        list-group-item-info
+    {% else %}
+        list-group-item-warning
+    {% endif %}">
+  <div class="media-left media-middle">
+    <img class="media-object" src="{{ user.avatar(128) }}">
+  </div>
+    <div class="media-body">
+        <h2 class="media-heading">
+            {{ user.username }}
+            {% if user.fullname is not none %}
+                <small>{{ user.fullname }}</small>
+            {% endif %}
+            {% if current_user == user %}
+                <a class="btn-xs btn-info" href={{ url_for('user.edit', username=current_user.username) }} role="button">Edit</a>
+            {% endif %}
+        </h2>
+
+        <p>E-mail: {{ user.email }}</p>
+
+        {% if user.about is not none %}
+            <blockquote>{{ user.about }}</blockquote>
+        {% endif %}
+
+    </div>
+</div>

@@ -2,7 +2,7 @@
 """The app module, containing the app factory function."""
 from flask import Flask, render_template
 
-from mms import commands, public, user, payments
+from mms import commands, public, user, payments, membership
 from mms.assets import assets
 from mms.extensions import admin, bcrypt, cache, csrf_protect, db, debug_toolbar, login_manager, migrate
 from mms.settings import ProdConfig
@@ -44,6 +44,7 @@ def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
+    app.register_blueprint(membership.views.blueprint)
     app.register_blueprint(payments.views.blueprint)
     return None
 

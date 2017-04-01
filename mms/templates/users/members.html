@@ -3,12 +3,12 @@
 {% block content %}
     <h1>Welcome {{ current_user.username }}</h1>
     <h3>This is the members-only page.</h3>
-    <ul>
+    <div class="media-list">
     {% for user in users %}
-        {% if not user.active %}<strike>{% endif %}
-        <li><b>{{ user.username }}</b> - {{ user.fullname }} {{ user.email }}</li>
-        {% if not user.active %}</strike>{% endif %}
+        {% if user.active %}
+            {% include 'users/member_row.html' %}
+        {% endif %}
     {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
 

@@ -1,0 +1,12 @@
+#! /bin/sh
+#
+# run.sh
+# Copyright (C) 2017 bolster <bolster@milo>
+#
+# Distributed under terms of the MIT license.
+#
+
+
+export FLASK_DEBUG=1
+export FLASK_APP=autoapp.py
+export PYTHONUNBUFFERED=1

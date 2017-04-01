@@ -1,6 +1,6 @@
 import paypalrestsdk
 from paypalrestsdk import BillingPlan, BillingAgreement
-from ..user.models import MembershipPlan
+from ..membership.models import MembershipPlan
 
 
 api = paypalrestsdk.Api({

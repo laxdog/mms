@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """User forms."""
-from flask_wtf import Form
-from wtforms import PasswordField, StringField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from flask_wtf import FlaskForm
+from wtforms import PasswordField, StringField, TextAreaField, DateField
+from wtforms.validators import Optional, DataRequired, URL, Email, EqualTo, Length, ValidationError
 
 from .models import User
 
 
-class RegisterForm(Form):
+class RegisterForm(FlaskForm):
     """Register form."""
 
     username = StringField('Username',
@@ -38,3 +38,13 @@ class RegisterForm(Form):
             self.email.errors.append('Email already registered')
             return False
         return True
+
+class EditForm(FlaskForm):
+    """Edit User"""
+
+    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=25)])
+    email = StringField('Contact Email', validators=[DataRequired(), Email(), Length(min=6, max=40)])
+    first_name = StringField('First Name')
+    last_name = StringField('Last Name')
+    about = TextAreaField('About')
+    url = StringField('Website', validators=[Optional(), URL()])
