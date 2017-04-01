@@ -1,0 +1,26 @@
+
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Welcome {{ current_user.username }}</h1>
+    <h3>This is the members-only page.</h3>
+    {% if plans_created is not none %}
+    <ul>
+    {% for plan in plans_created %}
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-lg-3 col-md-3 text-center">
+          <h2>{{ plan.name }}</h2>
+          </div>
+          <div class="col-lg-7 col-md-7 section-box">
+              <p>£{{ plan.price }} every
+              </p>
+            <p>{{ plan.description }}</p>
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+    </ul>
+    {% else %}
+        No Plans (Story of our lives)
+    {% endif %}
+{% endblock %}
