@@ -3,23 +3,108 @@
 {% block content %}
     <h1>Welcome {{ current_user.username }}</h1>
     <h3>This is the members-only page.</h3>
-    {% if plans %}
-    <div class="panel-group">
-        <div class="panel panel-default">
-    {% for plan in plans | sort(attribute='price') %}
-        <div class="row">
-          <div class="col-lg-3 col-md-3 text-center">
-          <h2>{{ plan.name }}</h2>
-          </div>
-          <div class="col-lg-7 col-md-7 section-box">
-              <p>£{{ plan.price }}</p>
-            <p>{{ plan.description }}</p>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
+
+    <div id="accordion" class="panel-group">
+        {% if plans %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse_memberships">
+                            Memberships
+                        </a>
+                    </h3>
+                </div>
+                <div id="collapse_memberships" class="panel-collapse collapse in">
+
+                    {% for plan in plans | sort(attribute='price', reverse=true) | selectattr("periodic", "equalto", true) %}
+                        <div class="row vertical-align">
+                            <div class="col-lg-2 col-md-2 text-center">
+                                <h2>{{ plan.name }}</h2>
+                            </div>
+                            <div class="col-lg-7 col-md-7 section-box">
+                                <p>{{ "£{:.2f}".format(plan.price) }}</p>
+                                <p>{{ plan.description }}</p>
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                {%  if current_user.is_current_member() %}
+                                    {%  if plan.has_member(current_user) %}
+                                        <a role="button" class="btn btn-block center-block btn-danger" href={{ url_for("membership.cancel", plan=plan) }}>
+                                            Cancel
+                                        </a>
+                                    {% else %}
+                                        <a role="button" class="btn btn-block center-block btn-default" href={{ url_for("membership.join", plan=plan) }}>
+                                            Change Plan
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <a role="button" class="btn btn-block center-block btn-primary" href={{ url_for("membership.join", plan=plan) }} >
+                                        Join Plan
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse_one_time">
+                            One-Time Purchases
+                        </a>
+                    </h3>
+                </div>
+                <div id="collapse_one_time" class="panel-collapse collapse">
+                    {% for plan in plans | sort(attribute='price') | selectattr("periodic", "equalto", false) %}
+                        <div class="row vertical-align">
+                            <div class="col-lg-2 col-md-2 text-center">
+                                <h2>{{ plan.name }}</h2>
+                            </div>
+                            <div class="col-lg-7 col-md-7 section-box">
+                                <p>{{ "£{:.2f}".format(plan.price) }}</p>
+                                <p>{{ plan.description }}</p>
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                {%  if current_user.is_current_member(plan=plan) %}
+                                    <button type="button" class="btn btn-block center-block btn-success">
+                                        Currently Active
+                                    </button>
+                                {% elif current_user.is_current_member() %}
+                                    <button type="button" class="btn btn-block center-block btn-warning">
+                                        Invalid
+                                    </button>
+
+                                {% else %}
+                                    <a role="button" class="btn btn-block center-block btn-default" href={{ url_for("membership.join", plan=plan, user=current_user) }}>
+                                        Buy
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                    <!-- Not currently active -->
+                    {% for purchasable in purchasables  | sort(attribute='price') | selectattr("periodic", "equalto", true) %}
+                        <div class="row vertical-align">
+                            <div class="col-lg-2 col-md-2 text-center">
+                                <h2>{{ purchasable.name }}</h2>
+                            </div>
+                            <div class="col-lg-7 col-md-7 section-box">
+                                <p>{{ "£{:.2f}".format(purchasable.price) }}</p>
+                                <p>{{ purchasable.description }}</p>
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                <a role="button" class="btn btn-block center-block btn-default" href={{ url_for("membership.join", plan=plan, user=current_user) }}>
+                                    Buy
+                                </a>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        {% endif %}
     </div>
-    {% else %}
-        No Plans (Story of our lives)
-    {% endif %}
 {% endblock %}

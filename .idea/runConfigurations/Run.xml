@@ -3,9 +3,11 @@
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
-      <env name="PYTHONUNBUFFERED" value="1" />
       <env name="FLASK_DEBUG" value="1" />
       <env name="FLASK_APP" value="autoapp.py" />
+      <env name="STRIPE_KEY" value="sk_test_u3qZWqwYQx9s4WN3fE8RhDNn" />
+      <env name="PYTHONUNBUFFERED" value="1" />
+      <env name="STRIPE_PUB" value="pk_test_9dkmuy8HPCFSagCYIsN5yA3M" />
     </envs>
     <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />

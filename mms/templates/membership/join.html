@@ -1,0 +1,22 @@
+<!-- extend layout -->
+{% extends "layout.html" %}
+
+{% block content %}
+    {{ plan.name }}
+    <form id="joinForm" class="form" role="form" action={{ url_for('membership.charge', plan=plan.name)}} method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <div class="form-group">
+        {% if plan.periodic %}
+            <button type="submit" class="btn btn-default">Subscribe for £{{ plan.price }} by magic</button>
+        {% else %}<!--Stripe works in pence/cents
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="{{ stripe_key }}"
+                data-description="{{ plan.name }}"
+                data-amount="{{ plan.price*100 }}"
+                data-currency="GBP"
+                data-locale="auto"></script>-->
+            <button type="submit" class="btn btn-default">Pay £{{ plan.price }} by magic</button>
+        {% endif %}
+    </div>
+    </form>
+{% endblock %}

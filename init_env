@@ -10,3 +10,6 @@
 export FLASK_DEBUG=1
 export FLASK_APP=autoapp.py
 export PYTHONUNBUFFERED=1
+
+export STRIPE_KEY=sk_test_u3qZWqwYQx9s4WN3fE8RhDNn
+export STRIPE_PUB=pk_test_9dkmuy8HPCFSagCYIsN5yA3M

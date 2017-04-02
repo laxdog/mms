@@ -1,11 +1,14 @@
 
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Welcome {{ current_user.username }}</h1>
-    <h3>This is the members-only page.</h3>
-    {% if current_user.membership %}
-        {{  current_user.membership }}
-        {{  current_user.membership }}
+<form id="joinForm" class="form" role="form" action={{ url_for('membership.cancel', plan=plan)}} method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-    {% endif %}
+    <div class="form-group">
+        <button type="submit" class="btn btn-default">Cancel {{ plan }}</button>
+        <div class="checkbox">
+            <label><input type="checkbox" name="check" value="confirmed">I'm sure</label>
+        </div>
+    </div>
+</form>
 {% endblock %}

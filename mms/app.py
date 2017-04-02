@@ -36,7 +36,6 @@ def register_extensions(app):
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
 
-
     return None
 
 
@@ -78,3 +77,4 @@ def register_commands(app):
     app.cli.add_command(commands.lint)
     app.cli.add_command(commands.clean)
     app.cli.add_command(commands.urls)
+

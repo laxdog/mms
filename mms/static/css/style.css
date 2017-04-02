@@ -84,3 +84,8 @@ footer .footer-nav {
   margin-right: 25px;
   list-style: none;
 }
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}

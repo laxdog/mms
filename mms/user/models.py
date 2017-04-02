@@ -105,6 +105,17 @@ class User(UserMixin, SurrogatePK, Model):
                 return True
         return False
 
+    def is_current_member(self, plan=None):
+        for m in self.membership:
+            if m.is_current():
+                if plan==None:
+                    return True
+                elif m.membership_type == plan:
+                    return True
+        return False
+
+
+
 
 class UserModelView(ManagmentSecView):
     form_excluded_columns = ('password')
