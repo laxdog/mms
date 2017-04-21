@@ -2,21 +2,57 @@
 {% extends "layout.html" %}
 
 {% block content %}
+
     {{ plan.name }}
-    <form id="joinForm" class="form" role="form" action={{ url_for('membership.charge', plan=plan.name)}} method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <div class="form-group">
-        {% if plan.periodic %}
-            <button type="submit" class="btn btn-default">Subscribe for £{{ plan.price }} by magic</button>
-        {% else %}<!--Stripe works in pence/cents
+    <div id="accordion" class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_stripe">
+                        Stripe
+                    </a>
+                </h3>
+            </div>
+            <div id="collapse_stripe" class="panel-collapse collapse in">
+                <form id="joinForm" class="form" role="form" action={{ url_for('membership.charge', plan=plan.name, method='stripe')}} method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="form-group">
+                        {% if plan.periodic %}
+                            <button type="submit" class="btn btn-default">Subscribe for £{{ plan.price }} by magic</button>
+                            {% else %}<!--Stripe works in pence/cents
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="{{ stripe_key }}"
                 data-description="{{ plan.name }}"
                 data-amount="{{ plan.price*100 }}"
                 data-currency="GBP"
                 data-locale="auto"></script>-->
-            <button type="submit" class="btn btn-default">Pay £{{ plan.price }} by magic</button>
-        {% endif %}
+                            <button type="submit" class="btn btn-default">Pay £{{ plan.price }} by magic</button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_braintree">
+                        Braintree
+                    </a>
+                </h3>
+            </div>
+            <div id="collapse_braintree" class="panel-collapse collapse in">
+                <form id="joinForm" class="form" role="form" action={{ url_for('membership.charge', plan=plan.name, method='braintree')}} method="post">
+                <div id="braintree-payment-form"></div>
+                <input type="submit" value="Pay">
+            </div>
+        </div>
     </div>
-    </form>
+
+<script src="https://js.braintreegateway.com/v2/braintree.js"></script>
+<script>
+braintree.setup("{{clientToken}}", "dropin", {
+  container: "braintree-payment-form"
+});
 {% endblock %}
+
+

@@ -5,6 +5,7 @@ import sys
 
 from flask.helpers import get_debug_flag
 from mms.user.models import User, Role, db, bcrypt
+from mms.membership.models import MembershipPlan
 
 from mms.app import create_app
 from mms.settings import DevConfig, ProdConfig
@@ -48,6 +49,22 @@ def main():
         db.session.add(role)
         db.session.commit()
         print('User added.')
+
+        ## Create Basic Membership Plans
+        plans = [
+            MembershipPlan(name='Student', price=15,
+                           description="occasionally in the space during the day, mostly experiment in the evenings, and are strapped for cash",
+                        ),
+            MembershipPlan(name='Enthusiast', price=25,
+                           description='regularly use the space in the evenings and make regular use of the equipment and space'
+                        ),
+            MembershipPlan(name='Freelancer', price=35,
+                           description='consistently in the space, regularly hot-desking with ongoing long term projects'
+                        )
+        ]
+        for plan in plans:
+            db.session.add(plan)
+        db.session.commit()
 
 
 

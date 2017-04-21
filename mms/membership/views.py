@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 from .models import MembershipPlan, Membership, db
 from ..user.models import User
 from ..payments.stripe import stripe_keys
+from ..payments.braintree import get_client_token
 blueprint = Blueprint('membership', __name__, url_prefix='/membership', static_folder='../static')
 
 
@@ -26,7 +27,9 @@ def join():
     plan=request.args['plan']
     plan = MembershipPlan.query.filter_by(name=plan).first()
 
-    return render_template('membership/join.html', plan=plan, stripe_key=stripe_keys['publishable_key'])
+    return render_template('membership/join.html', plan=plan,
+                           stripe_key=stripe_keys['publishable_key'],
+                           braintree_key=get_client_token())
 
 @blueprint.route('/charge', methods=['POST'])
 @login_required

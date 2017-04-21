@@ -8,7 +8,7 @@ api = paypalrestsdk.Api({
   'client_id': 'AS6BGmUdoBXLhbOva4zTlakpC6cb6IA_sovlZed-dd4BOkQZuFPtlPKn5RloYi3Zze57cIUHKmSH4EiI',
   'client_secret': 'EMiyfLU4uEN_755tgdoeGOcpzghPInxYFNpqaBYQgHYSECSMZTklkHND1iqCVNcdpyEAcjydXkXc4_tI'})
 
-def getplans():
+def get_current_plans():
     plans = BillingPlan.all(api=api)
     if 'plans' in plans:
         return plans['plans']
@@ -16,7 +16,7 @@ def getplans():
         return None
 
 
-def generate_billing_plan(membershipplan:MembershipPlan, replace=False):
+def create_membership_plan(membershipplan:MembershipPlan, replace=False):
     base_plan = {
         "name": membershipplan.name,
         "description": membershipplan.description,
@@ -48,7 +48,7 @@ def generate_billing_plan(membershipplan:MembershipPlan, replace=False):
     draft_plan = BillingPlan(base_plan, api=api)
     do_replace = False
     current_plan = None
-    for current_plan in getplans()['plans']:
+    for current_plan in get_current_plans()['plans']:
         if current_plan['name'] == draft_plan['name']:
             if not replace:
                 raise ValueError("A plan with that name already exists at id {}")
@@ -63,7 +63,7 @@ def generate_billing_plan(membershipplan:MembershipPlan, replace=False):
         plan_id = current_plan['id']
     else:
         draft_plan.create()
-        for current_plan in getplans()['plans']:
+        for current_plan in get_current_plans()['plans']:
             if current_plan['name'] == draft_plan['name']:
                 plan_id = current_plan['id']
                 break
